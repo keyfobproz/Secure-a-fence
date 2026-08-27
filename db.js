@@ -14,7 +14,7 @@ const initialData = {
       passwordHash: "$2a$10$w0BInG8mPZf5m6Xp0w2v8OqU0N1c5eQ2W2X2Y2Z2a2b2c2d2e2f2g", // fallback match for password123
       role: "admin",
       company: "Secure-A-Fence Operations",
-      phone: "(800) 555-FENCE"
+      phone: "279-261-3890"
     },
     {
       id: "cust-1",

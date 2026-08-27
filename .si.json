@@ -1,0 +1,14 @@
+{
+  "plugin": "org.smartide.plugin.web",
+  "run": "echo 'no command need'",
+  "intelligence": {
+    ".json": {
+      "enabled": true,
+      "run": "vscode-json-language-server --stdio"
+    },
+    ".html": {
+      "enabled": true,
+      "run": "vscode-html-language-server --stdio"
+    }
+  }
+}

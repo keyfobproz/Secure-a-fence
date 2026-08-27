@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // View Switching Navigation
+function toggleMobileMenu() {
+  document.getElementById('navLinksList').classList.toggle('open');
+}
+
 function switchView(viewId) {
+  // Close mobile menu when switching views
+  document.getElementById('navLinksList').classList.remove('open');
   document.querySelectorAll('.page-view').forEach(view => {
     view.classList.remove('active');
   });
@@ -229,7 +235,8 @@ function renderCartModal() {
     `;
   }).join('');
 
-  const deliveryFee = subtotal > 1000 ? 150.00 : (subtotal > 0 ? 95.00 : 0);
+  const distance = parseFloat(document.getElementById('checkoutDistance').value) || 0;
+  const deliveryFee = distance <= 20 ? 0 : (distance - 20) * 2 * 1.00;
   const tax = Math.round(subtotal * 0.08 * 100) / 100;
   const total = subtotal + deliveryFee + tax;
 
@@ -268,6 +275,7 @@ async function submitCheckout() {
 
   const orderType = document.getElementById('cartOrderType').value;
   const deliveryAddress = document.getElementById('checkoutAddress').value;
+  const deliveryDistance = document.getElementById('checkoutDistance').value;
   const jobsiteContact = document.getElementById('checkoutContact').value;
   const startDate = document.getElementById('checkoutStartDate').value;
 
@@ -282,6 +290,7 @@ async function submitCheckout() {
         orderType,
         items: cart,
         deliveryAddress,
+        deliveryDistance,
         jobsiteContact,
         startDate
       })

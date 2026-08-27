@@ -247,7 +247,8 @@ app.post('/api/orders', authenticateToken, (req, res) => {
       }
     }
 
-    const deliveryFee = subtotal > 1000 ? 150.00 : 95.00;
+    const distance = parseFloat(req.body.deliveryDistance) || 0;
+    const deliveryFee = distance <= 20 ? 0 : (distance - 20) * 2 * 1.00;
     const tax = Math.round(subtotal * 0.08 * 100) / 100;
     const totalAmount = Math.round((subtotal + deliveryFee + tax) * 100) / 100;
 

@@ -47,8 +47,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  position: relative;
 }
 
 .logo-link {
@@ -64,12 +63,49 @@ body {
   width: auto;
 }
 
+/* Desktop & Mobile Menu */
 .nav-links {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   list-style: none;
-  flex-wrap: wrap;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: #fff;
+  font-size: 1.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    gap: 0.75rem;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 .nav-btn {
@@ -483,7 +519,40 @@ body {
   margin: 0.5rem 0;
 }
 
-/* Portal & Tables */
+/* Projects & Reviews Sections */
+.projects-grid, .reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.project-card, .review-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.project-tag {
+  display: inline-block;
+  background: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.review-stars {
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Dashboard & Tables */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -562,7 +631,6 @@ body {
 .status-delivered { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
 .status-returned { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
 
-/* Tabs inside dashboard */
 .tab-row {
   display: flex;
   gap: 0.5rem;
@@ -585,7 +653,6 @@ body {
   border-bottom-color: var(--primary);
 }
 
-/* Modal Drawer */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -677,7 +744,6 @@ body {
   font-weight: bold;
 }
 
-/* Footer */
 .footer {
   background-color: #020617;
   border-top: 1px solid var(--border);
