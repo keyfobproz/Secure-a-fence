@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure-A-Fence | Temporary Fence Panel Sales & Rentals</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="nav-container">
+      <a href="#" class="logo-link" onclick="switchView('store-view')">
+        <img src="assets/logo.svg" alt="Secure-A-Fence" class="logo-img">
+      </a>
+      <ul class="nav-links">
+        <li><button class="nav-btn active" onclick="switchView('store-view')">🏷️ Store &amp; Products</button></li>
+        <li><button class="nav-btn" onclick="switchView('calc-view')">📐 Fence Calculator</button></li>
+        <li><button class="nav-btn" onclick="switchView('delivery-view')">🚚 Delivery Info</button></li>
+        <li><button class="nav-btn" onclick="switchView('portal-view')" id="portalNavBtn">👤 Customer Portal</button></li>
+        <li><button class="nav-btn admin-nav-btn" onclick="switchView('admin-view')">🛡️ Admin Management</button></li>
+        <li>
+          <button class="nav-btn cart-btn" onclick="openCartModal()">
+            🛒 Cart <span class="badge" id="cartBadgeCount">0</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Secure Jobsite &amp; Temporary Fence Solutions</h1>
+      <p>High-Quality Refurbished Fence Panels, Heavy-Duty Bases &amp; Couplers for Immediate Sale or Rental</p>
+      <div class="pricing-highlights">
+        <div class="price-pill">
+          <span>Refurbished Panels:</span>
+          <span class="amount">$65.00 / panel</span>
+        </div>
+        <div class="price-pill">
+          <span>Heavy Bases:</span>
+          <span class="amount">$10.00 / stand</span>
+        </div>
+        <div class="price-pill">
+          <span>Safety Clips:</span>
+          <span class="amount">$5.00 / clip</span>
+        </div>
+        <div class="price-pill">
+          <span>Monthly Rental Rate:</span>
+          <span class="amount">$15.00 / mo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main View Area -->
+  <main class="main-container">
+
+    <!-- PAGE VIEW 1: STORE & CATALOG -->
+    <section id="store-view" class="page-view active">
+      <div class="section-header">
+        <h2 class="section-title">Product Catalog</h2>
+        <div class="filter-bar">
+          <button class="filter-chip active" onclick="filterCatalog('all')">All Products</button>
+          <button class="filter-chip" onclick="filterCatalog('panel')">Panels ($65 Buy / $15 Rent)</button>
+          <button class="filter-chip" onclick="filterCatalog('stand')">Stands ($10)</button>
+          <button class="filter-chip" onclick="filterCatalog('clip')">Clips ($5)</button>
+          <button class="filter-chip" onclick="filterCatalog('accessory')">Accessories</button>
+        </div>
+      </div>
+      <div class="product-grid" id="productGridContainer">
+        <!-- Loaded via JavaScript -->
+      </div>
+    </section>
+
+    <!-- PAGE VIEW 2: INTERACTIVE FENCE CALCULATOR -->
+    <section id="calc-view" class="page-view">
+      <div class="section-header">
+        <h2 class="section-title">Fence Perimeter &amp; Package Calculator</h2>
+      </div>
+      <div class="calc-card">
+        <div class="calc-grid">
+          <div>
+            <h3>Jobsite Perimeter Input</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.9rem;">
+              Enter the total linear footage required for your project perimeter. We automatically calculate the exact quantity of 10ft panels, stands, and clips required.
+            </p>
+            <div class="form-group">
+              <label class="form-label">Total Linear Feet Needed</label>
+              <input type="number" id="calcLinearFeet" class="form-input" value="200" placeholder="e.g. 200" oninput="runCalculator()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Panel Standard Length</label>
+              <select id="calcPanelWidth" class="form-select" onchange="runCalculator()">
+                <option value="10" selected>10 Foot Standard Panel (6' High x 10' Wide)</option>
+                <option value="12">12 Foot Heavy-Duty Panel (6' High x 12' Wide)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><input type="checkbox" id="calcIncludeStands" checked onchange="runCalculator()"> Include Base Stands ($10 ea buy / $3 mo rent)</label>
+            </div>
+            <div class="form-group">
+              <label><input type="checkbox" id="calcIncludeClips" checked onchange="runCalculator()"> Include Connector Clips ($5 ea buy / $1 mo rent)</label>
+            </div>
+          </div>
+
+          <div>
+            <h3>Calculated Items &amp; Cost Estimate</h3>
+            <div class="calc-results" id="calcResultsBox">
+              <div class="result-item"><span>Panels Needed:</span><strong id="resPanels">20 Panels</strong></div>
+              <div class="result-item"><span>Stands / Bases Needed:</span><strong id="resStands">21 Stands</strong></div>
+              <div class="result-item"><span>Clips / Couplers Needed:</span><strong id="resClips">20 Clips</strong></div>
+              
+              <div class="comparison-box">
+                <div class="option-card highlight">
+                  <div class="option-title">Buy Outright</div>
+                  <div class="option-price" id="resBuyTotal">$1,610.00</div>
+                  <small style="color: var(--text-muted);">$65/panel + $10/stand + $5/clip</small>
+                  <button class="btn btn-accent" style="width: 100%; margin-top: 0.75rem;" onclick="addPackageToCart('sale')">Add Purchase Package</button>
+                </div>
+                <div class="option-card">
+                  <div class="option-title">Rent Monthly</div>
+                  <div class="option-price" id="resRentTotal">$380.00 / mo</div>
+                  <small style="color: var(--text-muted);">$15/mo panel + $3/mo stand + $1/mo clip</small>
+                  <button class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;" onclick="addPackageToCart('rental')">Add Rental Package</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE VIEW 3: DELIVERY INFO -->
+    <section id="delivery-view" class="page-view">
+      <div class="section-header">
+        <h2 class="section-title">Delivery, Shipping &amp; Logistics</h2>
+      </div>
+      <div class="calc-card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border);">
+          <h3 style="color: var(--accent); margin-bottom: 0.5rem;">🚚 Jobsite Flatbed Delivery</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            We deliver straight to your commercial or residential jobsite using custom flatbed crane truck fleets. Panels are bundled on pallets or steel racks for easy unloading.
+          </p>
+          <ul style="margin-top: 1rem; color: var(--text-main); font-size: 0.9rem; padding-left: 1.2rem;">
+            <li>Standard Metro Jobsite Freight: $95 - $150</li>
+            <li>Free delivery for orders over $2,500</li>
+            <li>Same-day / Next-day dispatch available</li>
+          </ul>
+        </div>
+        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border);">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem;">🏗️ Turnkey Installation &amp; Setup</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Need full jobsite perimeter assembly? Our experienced field crews unload, erect, stand, clamp, and secure privacy wind-screens around your site boundary.
+          </p>
+        </div>
+        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid var(--border);">
+          <h3 style="color: var(--success); margin-bottom: 0.5rem;">🏬 Self Pickup Available</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Have your own trailer or flatbed? Pickup directly from our regional warehouse yard at zero freight charge. Forklift loading assisted.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE VIEW 4: CUSTOMER PORTAL -->
+    <section id="portal-view" class="page-view">
+      <div class="section-header">
+        <h2 class="section-title">Customer Account Portal</h2>
+        <div id="authStatusText" style="color: var(--accent); font-weight: 700;">Not Signed In</div>
+      </div>
+
+      <!-- Auth Form Container (If not logged in) -->
+      <div id="authSection" class="calc-card" style="max-width: 500px; margin: 0 auto;">
+        <div class="tab-row" style="margin-bottom: 1.25rem;">
+          <button class="tab-btn active" id="loginTabBtn" onclick="toggleAuthTab('login')">Sign In</button>
+          <button class="tab-btn" id="registerTabBtn" onclick="toggleAuthTab('register')">Create Account</button>
+        </div>
+
+        <form id="authForm" onsubmit="handleAuthSubmit(event)">
+          <div class="form-group" id="nameGroup" style="display: none;">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="authName" class="form-input" placeholder="e.g. John Smith">
+          </div>
+          <div class="form-group" id="companyGroup" style="display: none;">
+            <label class="form-label">Company / Contractor Name</label>
+            <input type="text" id="authCompany" class="form-input" placeholder="e.g. Apex Construction LLC">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="authEmail" class="form-input" placeholder="john@company.com" required value="john@apexconstruction.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="authPassword" class="form-input" required value="password123">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="authSubmitBtn">Sign In to Account</button>
+        </form>
+      </div>
+
+      <!-- Customer Dashboard Container (If logged in) -->
+      <div id="customerDashboard" style="display: none;">
+        <div class="dashboard-grid">
+          <div class="metric-card">
+            <div class="metric-label">Account Holder</div>
+            <div class="metric-value" id="custNameVal" style="font-size: 1.3rem;">-</div>
+            <div class="metric-subtext" id="custCompanyVal">-</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Active Orders</div>
+            <div class="metric-value" id="custOrdersCount">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Active Rental Agreements</div>
+            <div class="metric-value" id="custRentalsCount">0</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+          <h3>My Active Rentals &amp; Jobsite Deployments</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Rental ID</th>
+                <th>Jobsite Address</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Monthly Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="custRentalsTableBody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem;">My Sales Order History</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Items Purchased</th>
+                <th>Total Paid</th>
+                <th>Delivery Location</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="custOrdersTableBody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <button class="btn btn-outline" style="margin-top: 1rem;" onclick="logoutUser()">Log Out of Account</button>
+      </div>
+    </section>
+
+    <!-- PAGE VIEW 5: ADMIN MANAGEMENT DASHBOARD -->
+    <section id="admin-view" class="page-view">
+      <div class="section-header">
+        <h2 class="section-title">Operations &amp; Asset Management Center</h2>
+        <div>
+          <button class="btn btn-accent" onclick="loadAdminDashboard()">🔄 Refresh Realtime Data</button>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Panel Sales Revenue</div>
+          <div class="metric-value" id="adminMetricSalesRev">$0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Active Monthly Rental Revenue</div>
+          <div class="metric-value" id="adminMetricRentalRev" style="color: var(--accent);">$0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Panels Deployed on Rental</div>
+          <div class="metric-value" id="adminMetricPanelsRented" style="color: var(--warning);">0</div>
+          <div class="metric-subtext">Currently out on jobsites</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Warehouse Stock Available</div>
+          <div class="metric-value" id="adminMetricWarehouseStock" style="color: var(--success);">0</div>
+          <div class="metric-subtext">Refurbished panels in yard</div>
+        </div>
+      </div>
+
+      <div class="tab-row">
+        <button class="tab-btn active" id="adminTab1" onclick="switchAdminSubTab('rentals')">📋 Active Rental Asset Fleet</button>
+        <button class="tab-btn" id="adminTab2" onclick="switchAdminSubTab('sales')">📦 Sales Orders</button>
+        <button class="tab-btn" id="adminTab3" onclick="switchAdminSubTab('shipments')">🚚 Shipping &amp; Delivery Logistics</button>
+      </div>
+
+      <!-- ADMIN SUB-TAB 1: RENTALS ASSET TRACKING -->
+      <div id="adminSubTabRentals">
+        <h3>Live Jobsite Rental Inventory &amp; Location Tracking</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">
+          Track exactly how many fence panels, stands, and clips are deployed across customer jobsites. Perform one-click return check-ins when equipment returns to warehouse.
+        </p>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Rental ID</th>
+                <th>Customer &amp; Company</th>
+                <th>Jobsite Address</th>
+                <th>Equipment Deployed</th>
+                <th>Rental Term</th>
+                <th>Status</th>
+                <th>Manage Return</th>
+              </tr>
+            </thead>
+            <tbody id="adminRentalsTableBody">
+              <!-- Loaded via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN SUB-TAB 2: SALES ORDERS -->
+      <div id="adminSubTabSales" style="display: none;">
+        <h3>Customer Sales Orders</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Purchased Items</th>
+                <th>Total</th>
+                <th>Delivery Address</th>
+                <th>Status</th>
+                <th>Update Status</th>
+              </tr>
+            </thead>
+            <tbody id="adminSalesTableBody">
+              <!-- Loaded via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADMIN SUB-TAB 3: DISPATCH & SHIPMENTS -->
+      <div id="adminSubTabShipments" style="display: none;">
+        <h3>Truck Dispatch &amp; Delivery Schedule</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Shipment ID</th>
+                <th>Type</th>
+                <th>Order Ref</th>
+                <th>Driver / Truck</th>
+                <th>Dispatch Date</th>
+                <th>Destination Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="adminShipmentsTableBody">
+              <!-- Loaded via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CART & CHECKOUT MODAL -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Your Shopping Cart &amp; Order Setup</h3>
+        <button class="close-btn" onclick="closeCartModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Order Type</label>
+          <select id="cartOrderType" class="form-select" onchange="renderCartModal()">
+            <option value="sale">Outright Purchase ($65 panel, $10 stand, $5 clip)</option>
+            <option value="rental">Monthly Rental ($15/mo panel, $3/mo stand, $1/mo clip)</option>
+          </select>
+        </div>
+
+        <div id="cartItemsList">
+          <!-- Cart items injected here -->
+        </div>
+
+        <div style="margin-top: 1.5rem; background: var(--bg-dark); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border);">
+          <div class="result-item"><span>Subtotal:</span><strong id="cartSubtotalVal">$0.00</strong></div>
+          <div class="result-item"><span>Jobsite Delivery Freight:</span><strong id="cartDeliveryFeeVal">$95.00</strong></div>
+          <div class="result-item"><span>Estimated Tax (8%):</span><strong id="cartTaxVal">$0.00</strong></div>
+          <div class="result-item" style="font-size: 1.2rem; color: var(--accent); border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 0.5rem;">
+            <span>Total Payable:</span><strong id="cartTotalVal">$0.00</strong>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Delivery &amp; Jobsite Logistics</h4>
+        <div class="form-group">
+          <label class="form-label">Jobsite Delivery Address</label>
+          <input type="text" id="checkoutAddress" class="form-input" placeholder="100 Construction Way, Site Gate B, City, State" value="1024 Commercial Way, Downtown Site Gate A">
+        </div>
+        <div class="form-group">
+          <label class="form-label">On-Site Contact Person &amp; Phone</label>
+          <input type="text" id="checkoutContact" class="form-input" placeholder="Mike Davis (555-0192)" value="Mike Davis (555-987-6543)">
+        </div>
+        <div class="form-group" id="rentalDatesGroup">
+          <label class="form-label">Target Delivery / Rental Start Date</label>
+          <input type="date" id="checkoutStartDate" class="form-input">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeCartModal()">Continue Shopping</button>
+        <button class="btn btn-accent" onclick="submitCheckout()">Submit Order &amp; Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RENTAL EXTEND / PICKUP MODAL -->
+  <div class="modal-overlay" id="rentalActionModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="rentalActionTitle">Manage Rental Agreement</h3>
+        <button class="close-btn" onclick="closeRentalActionModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="targetRentalId">
+        <input type="hidden" id="targetActionType">
+
+        <div id="extendRentalFields">
+          <p style="color: var(--text-muted); margin-bottom: 1rem;">Select how many additional days you would like to extend your rental agreement for this jobsite.</p>
+          <div class="form-group">
+            <label class="form-label">Extension Duration</label>
+            <select id="extendDays" class="form-select">
+              <option value="30">30 Days (1 Month)</option>
+              <option value="60">60 Days (2 Months)</option>
+              <option value="90">90 Days (3 Months)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="pickupRentalFields" style="display: none;">
+          <p style="color: var(--text-muted); margin-bottom: 1rem;">Schedule our flatbed transport team to pick up and dismantle the fence panels from your jobsite.</p>
+          <div class="form-group">
+            <label class="form-label">Preferred Pickup Date</label>
+            <input type="date" id="pickupDate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Site Access Notes for Driver</label>
+            <textarea id="pickupNotes" class="form-textarea" placeholder="Gate code, forklift access, contact supervisor..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeRentalActionModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitRentalAction()">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <h4 style="color: #fff; margin-bottom: 0.5rem;">Secure-A-Fence Sales &amp; Rentals</h4>
+        <p>Premium refurbished temporary fence panels, heavy bases, clamps &amp; privacy screening.</p>
+      </div>
+      <div>
+        <p>📞 Phone Orders: (800) 555-FENCE</p>
+        <p>📧 Email: sales@secureafence.com</p>
+        <p>© 2026 Secure-A-Fence Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

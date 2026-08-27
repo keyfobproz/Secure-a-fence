@@ -1,0 +1,181 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "Site Manager Admin",
+      "email": "admin@secureafence.com",
+      "passwordHash": "$2a$10$w0BInG8mPZf5m6Xp0w2v8OqU0N1c5eQ2W2X2Y2Z2a2b2c2d2e2f2g",
+      "role": "admin",
+      "company": "Secure-A-Fence Operations",
+      "phone": "(800) 555-FENCE"
+    },
+    {
+      "id": "cust-1",
+      "name": "John Builder",
+      "email": "john@apexconstruction.com",
+      "passwordHash": "$2a$10$w0BInG8mPZf5m6Xp0w2v8OqU0N1c5eQ2W2X2Y2Z2a2b2c2d2e2f2g",
+      "role": "customer",
+      "company": "Apex Construction Services",
+      "phone": "(555) 234-5678"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-panel-sale",
+      "name": "Refurbished Temporary Fence Panel (6' x 10')",
+      "category": "sales",
+      "type": "panel",
+      "salePrice": 65,
+      "rentalPriceMonthly": 15,
+      "inStock": 450,
+      "rentedCount": 120,
+      "description": "Heavy-duty 11-gauge galvanized chain-link mesh with sturdy welded tubular steel frame. Fully refurbished, inspected, and ready for immediate jobsite security.",
+      "image": "/assets/panel.svg",
+      "specs": "Dimensions: 6 ft High x 10 ft Wide | Frame: 1-3/8\" OD Steel | Mesh: 2-3/8\" Galvanized"
+    },
+    {
+      "id": "prod-stand-sale",
+      "name": "Heavy-Duty Fence Panel Stand / Base",
+      "category": "sales",
+      "type": "stand",
+      "salePrice": 10,
+      "rentalPriceMonthly": 3,
+      "inStock": 600,
+      "rentedCount": 130,
+      "description": "Low-profile steel base plate designed to hold panel uprights securely on flat surfaces like asphalt, concrete, or packed soil.",
+      "image": "/assets/stand.svg",
+      "specs": "Dimensions: 36\" x 16\" Base Plate | Weight: 26 lbs | Steel Finish: Hot-Dip Galvanized"
+    },
+    {
+      "id": "prod-clip-sale",
+      "name": "Safety Clamp / Panel Connector Clip",
+      "category": "sales",
+      "type": "clip",
+      "salePrice": 5,
+      "rentalPriceMonthly": 1,
+      "inStock": 1200,
+      "rentedCount": 260,
+      "description": "High-tensile steel coupler clamp used to join adjacent fence panels together securely at top and mid rail.",
+      "image": "/assets/clip.svg",
+      "specs": "Material: Forged Steel | Bolt: 1/2\" Galvanized Carriage Bolt included"
+    },
+    {
+      "id": "prod-screen-sale",
+      "name": "6' Privacy / Windscreen Mesh Roll (50 ft)",
+      "category": "sales",
+      "type": "accessory",
+      "salePrice": 45,
+      "rentalPriceMonthly": 10,
+      "inStock": 80,
+      "rentedCount": 15,
+      "description": "High-density polyethylene knitted fabric providing 88% visual blockage and wind resistance for site privacy.",
+      "image": "/assets/privacy_screen.svg",
+      "specs": "Length: 50 ft | Height: 5'8\" | Brass Grommets every 24\""
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-8941",
+      "customerId": "cust-1",
+      "customerName": "John Builder",
+      "customerCompany": "Apex Construction Services",
+      "customerEmail": "john@apexconstruction.com",
+      "customerPhone": "(555) 234-5678",
+      "orderType": "sale",
+      "items": [
+        {
+          "productId": "prod-panel-sale",
+          "name": "Refurbished Temporary Fence Panel (6' x 10')",
+          "unitPrice": 65,
+          "quantity": 20,
+          "total": 1300
+        },
+        {
+          "productId": "prod-stand-sale",
+          "name": "Heavy-Duty Fence Panel Stand / Base",
+          "unitPrice": 10,
+          "quantity": 21,
+          "total": 210
+        },
+        {
+          "productId": "prod-clip-sale",
+          "name": "Safety Clamp / Panel Connector Clip",
+          "unitPrice": 5,
+          "quantity": 20,
+          "total": 100
+        }
+      ],
+      "subtotal": 1610,
+      "deliveryFee": 150,
+      "tax": 128.8,
+      "totalAmount": 1888.8,
+      "status": "Delivered",
+      "deliveryAddress": "742 Evergreen Terrace, Jobsite Alpha, Metro Industrial Park",
+      "deliveryDate": "2026-08-20",
+      "createdAt": "2026-08-18T10:30:00.000Z"
+    }
+  ],
+  "rentals": [
+    {
+      "id": "RNT-3021",
+      "orderId": "ORD-8941-R",
+      "customerId": "cust-1",
+      "customerName": "John Builder",
+      "customerCompany": "Apex Construction Services",
+      "customerEmail": "john@apexconstruction.com",
+      "customerPhone": "(555) 234-5678",
+      "jobsiteAddress": "1024 Commercial Way, Downtown Tower Project",
+      "jobsiteContact": "Mike Davis (Site Foreman - 555-987-6543)",
+      "startDate": "2026-08-01",
+      "endDate": "2026-09-01",
+      "monthlyRateTotal": 420,
+      "status": "Active",
+      "items": [
+        {
+          "productId": "prod-panel-sale",
+          "name": "Refurbished Panel (Rental)",
+          "quantity": 20,
+          "monthlyUnitPrice": 15,
+          "subtotal": 300
+        },
+        {
+          "productId": "prod-stand-sale",
+          "name": "Fence Stand (Rental)",
+          "quantity": 20,
+          "monthlyUnitPrice": 3,
+          "subtotal": 60
+        },
+        {
+          "productId": "prod-clip-sale",
+          "name": "Safety Clip (Rental)",
+          "quantity": 60,
+          "monthlyUnitPrice": 1,
+          "subtotal": 60
+        }
+      ],
+      "notes": "Installed along South perimeter. Customer requested extra clips."
+    }
+  ],
+  "shipments": [
+    {
+      "id": "SHIP-1002",
+      "orderId": "ORD-8941",
+      "type": "Outbound Sale Delivery",
+      "driverName": "Dave Miller (Truck #4)",
+      "dispatchDate": "2026-08-20",
+      "status": "Delivered",
+      "destination": "742 Evergreen Terrace, Jobsite Alpha",
+      "notes": "Unloaded with forklift on west gate."
+    },
+    {
+      "id": "SHIP-1003",
+      "orderId": "RNT-3021",
+      "type": "Rental Deployment",
+      "driverName": "Sam Jackson (Flatbed #2)",
+      "dispatchDate": "2026-08-01",
+      "status": "Delivered & Erected",
+      "destination": "1024 Commercial Way, Downtown Tower Project",
+      "notes": "Rental panel layout setup completed per site diagram."
+    }
+  ]
+}

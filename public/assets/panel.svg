@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0e0e0"/>
+      <stop offset="50%" stop-color="#9e9e9e"/>
+      <stop offset="100%" stop-color="#616161"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <pattern id="chainlink" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 0 10 L 10 0 L 20 10 L 10 20 Z" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="400" fill="url(#bg)"/>
+
+  <!-- High quality Fence Panel Representation -->
+  <g transform="translate(60, 40)">
+    <!-- Base Plate Left & Right -->
+    <rect x="20" y="300" width="80" height="15" rx="3" fill="url(#metal)" stroke="#334155" stroke-width="2"/>
+    <rect x="380" y="300" width="80" height="15" rx="3" fill="url(#metal)" stroke="#334155" stroke-width="2"/>
+
+    <!-- Main Outer Frame -->
+    <rect x="50" y="20" width="380" height="280" rx="8" fill="none" stroke="url(#metal)" stroke-width="12"/>
+    <rect x="56" y="26" width="368" height="268" rx="4" fill="url(#chainlink)" opacity="0.85"/>
+
+    <!-- Center Support Stiffener Bar -->
+    <line x1="240" y1="20" x2="240" y2="300" stroke="url(#metal)" stroke-width="8"/>
+
+    <!-- Corner Brackets -->
+    <polygon points="56,26 86,26 56,56" fill="#64748b"/>
+    <polygon points="424,26 394,26 424,56" fill="#64748b"/>
+    <polygon points="56,294 86,294 56,264" fill="#64748b"/>
+    <polygon points="424,294 394,294 424,264" fill="#64748b"/>
+
+    <!-- Safety Badge -->
+    <g transform="translate(320, 230)">
+      <rect width="90" height="35" rx="4" fill="#f59e0b"/>
+      <text x="45" y="22" font-family="sans-serif" font-weight="bold" font-size="12" fill="#0f172a" text-anchor="middle">REFURBISHED</text>
+    </g>
+  </g>
+</svg>
