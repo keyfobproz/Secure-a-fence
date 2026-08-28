@@ -28,15 +28,28 @@ const initialData = {
   ],
   products: [
     {
-      id: "prod-panel-sale",
-      name: "Refurbished Temporary Fence Panel (6' x 10')",
+      id: "prod-panel-6x12",
+      name: "Refurbished Temporary Fence Panel (6' x 12')",
       category: "sales",
       type: "panel",
       salePrice: 65.00,
       rentalPriceMonthly: 15.00,
-      inStock: 450,
-      rentedCount: 120,
-      description: "Heavy-duty 11-gauge galvanized chain-link mesh with sturdy welded tubular steel frame. Fully refurbished, inspected, and ready for immediate jobsite security.",
+      inStock: 300,
+      rentedCount: 90,
+      description: "Heavy-duty 11-gauge galvanized chain-link mesh with sturdy welded tubular steel frame (6ft x 12ft). Fully refurbished and cross-braced.",
+      image: "/assets/panel.svg",
+      specs: "Dimensions: 6 ft High x 12 ft Wide | Frame: 1-3/8\" OD Steel | Mesh: 2-3/8\" Galvanized"
+    },
+    {
+      id: "prod-panel-6x10",
+      name: "Refurbished Temporary Fence Panel (6' x 10')",
+      category: "sales",
+      type: "panel",
+      salePrice: 50.00,
+      rentalPriceMonthly: 12.00,
+      inStock: 250,
+      rentedCount: 60,
+      description: "Standard 6ft x 10ft refurbished temporary chain-link fence panel. Ideal for tighter perimeters and flexible jobsite layouts.",
       image: "/assets/panel.svg",
       specs: "Dimensions: 6 ft High x 10 ft Wide | Frame: 1-3/8\" OD Steel | Mesh: 2-3/8\" Galvanized"
     },
