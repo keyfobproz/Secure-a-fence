@@ -14,7 +14,7 @@
 
   <rect width="700" height="450" fill="url(#standGleam)"/>
 
-  <!-- Single Stand (Matching User's Photo #1) -->
+  <!-- Single Stand (Matching User's Provided Flat Stand Photo) -->
   <g transform="translate(80, 50)">
     <!-- Base shadow -->
     <ellipse cx="270" cy="320" rx="200" ry="22" fill="#020617" opacity="0.6" filter="blur(6px)"/>

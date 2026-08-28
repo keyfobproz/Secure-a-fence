@@ -108,7 +108,7 @@ app.post('/api/auth/register', async (req, res) => {
       name,
       email: email.toLowerCase(),
       passwordHash: hashedPassword,
-      role: role === 'admin' ? 'admin' : 'customer',
+      role: 'customer',
       company: company || '',
       phone: phone || ''
     };
@@ -218,13 +218,28 @@ app.post('/api/orders', authenticateToken, (req, res) => {
     const db = getDb();
     const user = db.users.find(u => u.id === req.user.id);
 
+    for (const item of items) {
+      if (!item.productId) {
+        return res.status(400).json({ error: 'Each item must have a productId' });
+      }
+      const prod = db.products.find(p => p.id === item.productId);
+      if (!prod) {
+        return res.status(400).json({ error: `Product not found: ${item.productId}` });
+      }
+      const qty = parseInt(item.quantity) || 1;
+      if (qty <= 0) {
+        return res.status(400).json({ error: `Quantity for product ${prod.name} must be greater than 0` });
+      }
+      if (prod.inStock < qty) {
+        return res.status(400).json({ error: `Insufficient stock for ${prod.name}. Requested: ${qty}, Available: ${prod.inStock}` });
+      }
+    }
+
     let subtotal = 0;
     const processedItems = [];
 
     for (const item of items) {
       const prod = db.products.find(p => p.id === item.productId);
-      if (!prod) continue;
-
       const qty = parseInt(item.quantity) || 1;
       const unitPrice = orderType === 'rental' ? prod.rentalPriceMonthly : prod.salePrice;
       const total = unitPrice * qty;
@@ -240,9 +255,9 @@ app.post('/api/orders', authenticateToken, (req, res) => {
 
       // Adjust stock / rental inventory count
       if (orderType === 'sale') {
-        prod.inStock = Math.max(0, prod.inStock - qty);
+        prod.inStock -= qty;
       } else if (orderType === 'rental') {
-        prod.inStock = Math.max(0, prod.inStock - qty);
+        prod.inStock -= qty;
         prod.rentedCount = (prod.rentedCount || 0) + qty;
       }
     }
@@ -471,6 +486,69 @@ app.put('/api/admin/rentals/:id/checkin', authenticateToken, requireAdmin, (req,
 app.get('/api/admin/shipments', authenticateToken, requireAdmin, (req, res) => {
   const db = getDb();
   res.json(db.shipments);
+});
+
+// --- ROUTE OPTIMIZATION ENGINE ---
+
+app.post('/api/admin/dispatch/optimize', authenticateToken, requireAdmin, (req, res) => {
+  const { shipmentIds, startLocation = 'Sacramento Warehouse' } = req.body;
+  if (!shipmentIds || !Array.isArray(shipmentIds) || shipmentIds.length === 0) {
+    return res.status(400).json({ error: 'shipmentIds must be a non-empty array' });
+  }
+  const db = getDb();
+  
+  // Filter selected shipments
+  let selectedShipments = db.shipments.filter(s => shipmentIds.includes(s.id));
+  
+  if (selectedShipments.length === 0) {
+    return res.status(400).json({ error: 'No shipments selected for optimization' });
+  }
+
+  // Mock distance calculation based on address strings (for prototype)
+  // In a production app, this would use Google Maps Distance Matrix API
+  const getDistance = (addr1, addr2) => {
+    // Simple mock logic: different lengths = further away
+    return Math.abs(addr1.length - addr2.length) + (Math.random() * 5);
+  };
+
+  // Nearest Neighbor Optimization Algorithm
+  let optimizedRoute = [];
+  let currentPos = startLocation;
+  let remaining = [...selectedShipments];
+
+  while (remaining.length > 0) {
+    let nearestIndex = 0;
+    let minDistance = getDistance(currentPos, remaining[0].destination);
+
+    for (let i = 1; i < remaining.length; i++) {
+      let dist = getDistance(currentPos, remaining[i].destination);
+      if (dist < minDistance) {
+        minDistance = dist;
+        nearestIndex = i;
+      }
+    }
+
+    const nextStop = remaining.splice(nearestIndex, 1)[0];
+    optimizedRoute.push({
+      ...nextStop,
+      estimatedLegDistance: minDistance.toFixed(1),
+      estimatedTravelTime: Math.round(minDistance * 2) // mock minutes
+    });
+    currentPos = nextStop.destination;
+  }
+
+  const totalMiles = optimizedRoute.reduce((sum, stop) => sum + parseFloat(stop.estimatedLegDistance), 0);
+  const totalTime = optimizedRoute.reduce((sum, stop) => sum + stop.estimatedTravelTime, 0);
+
+  res.json({
+    route: optimizedRoute,
+    summary: {
+      totalStops: optimizedRoute.length,
+      estimatedTotalMiles: totalMiles.toFixed(1),
+      estimatedTotalDriveTime: `${Math.floor(totalTime / 60)}h ${totalTime % 60}m`,
+      optimizedOrder: optimizedRoute.map(s => s.id)
+    }
+  });
 });
 
 app.put('/api/admin/shipments/:id', authenticateToken, requireAdmin, (req, res) => {

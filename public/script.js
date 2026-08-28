@@ -694,3 +694,101 @@ async function loadAdminShipmentsTable() {
     `).join('');
   }
 }
+
+// Custom Gate & Door Designer Logic
+function updateGateDesigner() {
+  const style = document.getElementById('gateStyle').value;
+  const hardwareGroup = document.getElementById('gateHardwareGroup');
+  const qtyGroup = document.getElementById('gateQtyGroup');
+  const orderTypeGroup = document.getElementById('gateOrderTypeGroup');
+  const resultsBox = document.getElementById('gateResultsBox');
+  const preview = document.getElementById('gateVisualPreview');
+
+  if (style === 'none') {
+    hardwareGroup.style.display = 'none';
+    qtyGroup.style.display = 'none';
+    orderTypeGroup.style.display = 'none';
+    resultsBox.style.display = 'none';
+    preview.innerHTML = '<span style="color: var(--text-muted); font-size: 0.9rem;">Select a gate style to view preview</span>';
+    return;
+  }
+
+  hardwareGroup.style.display = 'block';
+  qtyGroup.style.display = 'block';
+  orderTypeGroup.style.display = 'block';
+  resultsBox.style.display = 'block';
+
+  const orderType = document.getElementById('gateOrderType').value;
+  const qty = parseInt(document.getElementById('gateQuantity').value) || 1;
+  const usePadlock = document.getElementById('gatePadlockLatch').checked;
+  const useDropRod = document.getElementById('gateDropRod').checked;
+  const useWheel = document.getElementById('gateWheel').checked;
+
+  const gateProdId = style === 'pedestrian' ? 'prod-gate-pedestrian' : (style === 'single-swing' ? 'prod-gate-single' : 'prod-gate-double');
+  const gateProd = productsData.find(p => p.id === gateProdId);
+  const latchProd = productsData.find(p => p.id === 'prod-gate-latch');
+  const rodProd = productsData.find(p => p.id === 'prod-gate-rod');
+  const wheelProd = productsData.find(p => p.id === 'prod-gate-wheel');
+
+  if (!gateProd) return;
+
+  const getPrice = (prod) => (orderType === 'rental' ? prod.rentalPriceMonthly : prod.salePrice);
+
+  let unitTotal = getPrice(gateProd);
+  let summary = gateProd.name;
+
+  if (usePadlock && latchProd) {
+    unitTotal += getPrice(latchProd);
+    summary += ' + Padlock Latch';
+  }
+  if (useDropRod && rodProd) {
+    unitTotal += getPrice(rodProd);
+    summary += ' + Drop-Rod';
+  }
+  if (useWheel && wheelProd) {
+    unitTotal += getPrice(wheelProd);
+    summary += ' + Support Wheel';
+  }
+
+  const finalTotal = unitTotal * qty;
+
+  document.getElementById('resGateSummary').innerText = `${qty}x ${summary}`;
+  document.getElementById('resGateTotal').innerText = `$${finalTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+  let previewHtml = `
+    <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+      <img src="${gateProd.image}" style="height: 120px; opacity: 0.8;">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px dashed var(--accent); width: ${style === 'pedestrian' ? '40px' : '100px'}; height: 80px; background: rgba(56, 189, 248, 0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--accent); font-weight: bold; text-transform: uppercase;">
+        ${style.replace('-', ' ')}
+      </div>
+  `;
+
+  if (useWheel) {
+    previewHtml += `<div style="position: absolute; bottom: 15px; left: calc(50% + ${style === 'pedestrian' ? '15px' : '45px'}); width: 12px; height: 12px; background: #475569; border-radius: 50%; border: 2px solid #fff;"></div>`;
+  }
+  if (usePadlock) {
+    previewHtml += `<div style="position: absolute; top: 45%; left: calc(50% + ${style === 'pedestrian' ? '22px' : '52px'}); width: 8px; height: 10px; background: #f59e0b; border-radius: 2px;"></div>`;
+  }
+
+  previewHtml += '</div>';
+  preview.innerHTML = previewHtml;
+}
+
+function addCustomGateToCart() {
+  const style = document.getElementById('gateStyle').value;
+  const orderType = document.getElementById('gateOrderType').value;
+  const qty = parseInt(document.getElementById('gateQuantity').value) || 1;
+  const usePadlock = document.getElementById('gatePadlockLatch').checked;
+  const useDropRod = document.getElementById('gateDropRod').checked;
+  const useWheel = document.getElementById('gateWheel').checked;
+
+  const gateProdId = style === 'pedestrian' ? 'prod-gate-pedestrian' : (style === 'single-swing' ? 'prod-gate-single' : 'prod-gate-double');
+  
+  addToCart(gateProdId, qty, orderType);
+  if (usePadlock) addToCart('prod-gate-latch', qty, orderType);
+  if (useDropRod) addToCart('prod-gate-rod', qty, orderType);
+  if (useWheel) addToCart('prod-gate-wheel', qty, orderType);
+
+  openCartModal();
+  alert(`${qty}x Custom Gate Package added to your cart!`);
+}
