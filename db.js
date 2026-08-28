@@ -49,9 +49,9 @@ const initialData = {
       rentalPriceMonthly: 3.00,
       inStock: 600,
       rentedCount: 130,
-      description: "Low-profile steel base plate designed to hold panel uprights securely on flat surfaces like asphalt, concrete, or packed soil.",
+      description: "Low-profile steel base plate designed to hold panel uprights securely on flat surfaces like asphalt, concrete, or packed soil. Note: Stand style/specs subject to change.",
       image: "/assets/stand.svg",
-      specs: "Dimensions: 36\" x 16\" Base Plate | Weight: 26 lbs | Steel Finish: Hot-Dip Galvanized"
+      specs: "Dimensions: 36\" x 16\" Base Plate | Weight: 26 lbs | Steel Finish: Hot-Dip Galvanized (Specs subject to change)"
     },
     {
       id: "prod-clip-sale",
