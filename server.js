@@ -456,6 +456,19 @@ app.put('/api/admin/sales/:id/status', authenticateToken, requireAdmin, (req, re
 
 app.get('/api/admin/rentals', authenticateToken, requireAdmin, (req, res) => {
   const db = getDb();
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Auto-check overdue rentals
+  let updated = false;
+  db.rentals.forEach(r => {
+    if (r.status === 'Active' && r.endDate < today) {
+      r.status = 'Overdue';
+      r.notes += ` | Automatically marked Overdue on ${today}`;
+      updated = true;
+    }
+  });
+  if (updated) saveDb(db);
+
   res.json(db.rentals);
 });
 
